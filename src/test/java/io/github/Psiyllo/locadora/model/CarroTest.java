@@ -9,8 +9,29 @@ class CarroTest {
     @Test
     @DisplayName("Deve calcular o valor correto do alguel")
     void deveCalcularValorAlguel(){
+
+        //1. Cenário
         Carro carro = new Carro("Sedan", 100.0);
-        double total = carro.calcularValorAlguel(6);
-        Assertions.assertEquals(600.0, total);
+
+        //2. Execução
+        double total = carro.calcularValorAlguel(3);
+
+        //3. Verificação
+        Assertions.assertEquals(300.0, total);
+    }
+
+    @Test
+    @DisplayName("Deve calcular o valor correto do alguel com desconto")
+    void deveCalcularValorAlguelComDesconto(){
+
+        //1. Cenário
+        Carro carro = new Carro("Sedan", 100.0);
+        int quantidadeDias = 5;
+
+        //2. Execução
+        double total = carro.calcularValorAlguel(quantidadeDias);
+
+        //3. Verificação
+        Assertions.assertEquals(450.0, total);
     }
 }
