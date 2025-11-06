@@ -11,7 +11,11 @@ public class Carro {
     }
 
     public double calcularValorAlguel(int dias){
-        return dias * valorDiaria;
+        double desconto = 0;
+        if(dias >= 5){
+            desconto = 50.0;
+        }
+        return (dias * valorDiaria) - desconto;
     }
 
     public String getModelo() {
