@@ -10,15 +10,15 @@ public class Reserva {
 
 
     public Reserva(Carro carro, Cliente cliente, int quantidadeDias) {
+        if(quantidadeDias < 1){
+            throw new ReservaInvalidaException("A Reserva não pode ter uma quantidade de dias menor que 1");
+        }
         this.carro = carro;
         this.cliente = cliente;
         this.quantidadeDias = quantidadeDias;
     }
 
     public double calcularTotalReserva(){
-        if(quantidadeDias < 1){
-            throw new ReservaInvalidaException("A Reserva não pode ter uma quantidade de dias menor que 1");
-        }
         return this.carro.calcularValorAluguel(this.quantidadeDias);
     }
 }
