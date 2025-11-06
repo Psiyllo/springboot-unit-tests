@@ -10,7 +10,7 @@ public class Carro {
         this.valorDiaria = valorDiaria;
     }
 
-    public double calcularValorAlguel(int dias){
+    public double calcularValorAluguel(int dias){
         double desconto = 0;
         if(dias >= 5){
             desconto = 50.0;

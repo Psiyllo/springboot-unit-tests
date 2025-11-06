@@ -14,7 +14,7 @@ class CarroTest {
         Carro carro = new Carro("Sedan", 100.0);
 
         //2. Execução
-        double total = carro.calcularValorAlguel(3);
+        double total = carro.calcularValorAluguel(3);
 
         //3. Verificação
         Assertions.assertEquals(300.0, total);
@@ -29,7 +29,7 @@ class CarroTest {
         int quantidadeDias = 5;
 
         //2. Execução
-        double total = carro.calcularValorAlguel(quantidadeDias);
+        double total = carro.calcularValorAluguel(quantidadeDias);
 
         //3. Verificação
         Assertions.assertEquals(450.0, total);
