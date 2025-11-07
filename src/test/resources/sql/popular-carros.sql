@@ -1,7 +1,7 @@
-INSERT INTO carro (id, modelo, valor_diaria) values (1, 'Suv', 150);
-INSERT INTO carro (id, modelo, valor_diaria) values (2, 'Hatch', 100);
-INSERT INTO carro (id, modelo, valor_diaria) values (3, 'Suv', 400);
-INSERT INTO carro (id, modelo, valor_diaria) values (4, 'Sedan', 150);
-INSERT INTO carro (id, modelo, valor_diaria) values (5, 'Sedan', 125);
-INSERT INTO carro (id, modelo, valor_diaria) values (6, 'Suv', 350);
-INSERT INTO carro (id, modelo, valor_diaria) values (7, 'Suv', 300);
+INSERT INTO carro (id, modelo, valor_diaria, ano) values (1, 'Suv', 150, 2025);
+INSERT INTO carro (id, modelo, valor_diaria, ano) values (2, 'Hatch', 100, 2025);
+INSERT INTO carro (id, modelo, valor_diaria, ano) values (3, 'Suv', 400, 2025);
+INSERT INTO carro (id, modelo, valor_diaria, ano) values (4, 'Sedan', 150, 2025);
+INSERT INTO carro (id, modelo, valor_diaria, ano) values (5, 'Sedan', 125, 2025);
+INSERT INTO carro (id, modelo, valor_diaria, ano) values (6, 'Suv', 350, 2025);
+INSERT INTO carro (id, modelo, valor_diaria, ano) values (7, 'Suv', 300, 2025);
