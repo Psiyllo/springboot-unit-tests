@@ -11,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,5 +39,17 @@ class CarroServiceTest {
         assertEquals("Sedan", carroSalvo.getModelo());
 
         Mockito.verify(repository).save(Mockito.any());
+    }
+
+    @Test
+    void deveDarErroAoTentarSalvarCarroComDiariaNegativa(){
+        CarroEntity carro = new CarroEntity("Sedan", 0, 2026);
+
+        var erro = catchThrowable( () -> service.salvar(carro) );
+
+        assertThat(erro).isInstanceOf(IllegalArgumentException.class);
+
+        Mockito.verify(repository, Mockito.never()).save(Mockito.any());
+
     }
 }
