@@ -23,12 +23,19 @@ class CarroServiceTest {
 
     @Test
     void deveSalvarUmCarro(){
-        Mockito
-                .when(repository.findById(1L))
-                .thenReturn(Optional.of(new CarroEntity("Testando MOCK", 10.0, 2025)));
 
-        Optional<CarroEntity> carroEncontrado = repository.findById(1L);
-        System.out.println(carroEncontrado.get().getModelo());
+        CarroEntity carroSalvar = new CarroEntity("Sedan", 20, 2026);
+
+        CarroEntity carroMock = new CarroEntity("Sedan", 200, 2026);
+        carroMock.setId(1L);
+
+        Mockito.when(repository.save(Mockito.any()) ).thenReturn(carroMock);
+
+        var carroSalvo = service.salvar(carroSalvar);
+
+        assertNotNull(carroSalvo);
+        assertEquals("Sedan", carroSalvo.getModelo());
+
+        Mockito.verify(repository).save(Mockito.any());
     }
-
 }
