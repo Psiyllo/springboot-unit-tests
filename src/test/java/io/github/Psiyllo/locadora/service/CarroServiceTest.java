@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,7 +53,6 @@ class CarroServiceTest {
         assertThat(erro).isInstanceOf(IllegalArgumentException.class);
 
         Mockito.verify(repository, Mockito.never()).save(Mockito.any());
-
     }
 
     @Test
@@ -85,6 +85,77 @@ class CarroServiceTest {
 
         assertThat(erro).isInstanceOf(EntityNotFoundException.class);
         Mockito.verify(repository, Mockito.never()).save(Mockito.any());
+    }
 
+    @Test
+    void deveDarErroAoTentarDeletarCarroInexistente(){
+        Long id = 1L;
+
+        Mockito.when(repository.findById(Mockito.any())).thenReturn(Optional.empty());
+
+        var erro = catchThrowable(() -> service.deletar(id));
+
+        assertThat(erro).isInstanceOf(EntityNotFoundException.class);
+
+        Mockito.verify(repository, Mockito.never()).deleteById(Mockito.any());
+    }
+
+    @Test
+    void deveDeletarUmCarro(){
+        Long id = 1L;
+        var carro = new CarroEntity("Palio", 10, 2013);
+
+        Mockito.when(repository.findById(Mockito.any())).thenReturn(Optional.of(carro));
+
+        service.deletar(id);
+
+        Mockito.verify(repository, Mockito.times(1)).deleteById(carro.getId());
+    }
+
+    @Test
+    void deveDarErroAoTentarBuscarCarroInexistente(){
+        Long id = 1L;
+
+        Mockito.when(repository.findById(Mockito.any())).thenReturn(Optional.empty());
+
+        var erro = catchThrowable(() -> service.buscarPorId(id));
+
+        assertThat(erro).isInstanceOf(EntityNotFoundException.class);
+
+        Mockito.verify(repository, Mockito.times(1)).findById(Mockito.any());
+    }
+
+    @Test
+    void deveBuscarUmCarro(){
+        Long id = 1L;
+
+        var carro = new CarroEntity("Palio", 10, 2013);
+
+        Mockito.when(repository.findById(Mockito.any())).thenReturn(Optional.of(carro));
+
+        var carroEncontrado = service.buscarPorId(id);
+
+        assertThat(carroEncontrado.getModelo()).isEqualTo("Palio");
+        assertThat(carroEncontrado.getValorDiaria()).isEqualTo(10);
+        assertThat(carroEncontrado.getAno()).isEqualTo(2013);
+
+        Mockito.verify(repository, Mockito.times(1)).findById(id);
+    }
+
+    @Test
+    void deveListarTodos(){
+        var carro1 = new CarroEntity(1L,"Palio", 10, 2013);
+        var carro2 = new CarroEntity(2L,"Passat", 20, 2013);
+        var carro3 = new CarroEntity(3L,"Compass", 15, 2018);
+        var carro4 = new CarroEntity(4L,"BMW M3", 45, 2014);
+
+        var lista = List.of(carro1, carro2, carro3, carro4);
+        Mockito.when(repository.findAll()).thenReturn(lista);
+
+        List<CarroEntity> resultado = service.listarTodos();
+
+        assertThat(resultado).hasSize(4);
+        Mockito.verify(repository, Mockito.times(1)).findAll();
+        Mockito.verifyNoMoreInteractions(repository);
     }
 }

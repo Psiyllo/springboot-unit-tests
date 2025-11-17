@@ -24,4 +24,9 @@ public class CarroEntity {
         this.valorDiaria = valorDiaria;
         this.ano = ano;
     }
+
+    public CarroEntity(long id, String modelo, double valorDiaria, int ano) {
+        this(modelo, valorDiaria, ano);
+        this.id = id;
+    }
 }
