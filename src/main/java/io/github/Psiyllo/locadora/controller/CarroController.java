@@ -55,4 +55,14 @@ public class CarroController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id){
+        try {
+            service.deletar(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
