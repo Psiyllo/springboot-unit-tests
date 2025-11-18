@@ -1,6 +1,7 @@
 package io.github.Psiyllo.locadora.controller;
 
 import io.github.Psiyllo.locadora.entity.CarroEntity;
+import io.github.Psiyllo.locadora.model.Exceptions.EntityNotFoundException;
 import io.github.Psiyllo.locadora.service.CarroService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,10 +11,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @WebMvcTest(CarroController.class)
@@ -49,10 +53,34 @@ class CarroControllerTest {
 
         //verificação
         result
-                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.modelo").value("Palio"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.valorDiaria").value(10))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.ano").value(2013));
+    }
+
+    @Test
+    void deveObterDetalhesCarro() throws Exception{
+        Mockito.when(service.buscarPorId(Mockito.any())).thenReturn(new CarroEntity(
+                1L, "Palio", 10,2013
+        ));
+
+        mvc.perform(
+                MockMvcRequestBuilders.get("/carros/1")
+        ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.modelo").value("Palio"))
+                .andExpect(jsonPath("$.valorDiaria").value(10))
+                .andExpect(jsonPath("$.ano").value(2013));
+    }
+
+    @Test
+    void deveRetornarNotFoundAoObterDetalhesCarroInexistente() throws Exception{
+        Mockito.when(service.buscarPorId(Mockito.any())).thenThrow(EntityNotFoundException.class);
+
+        mvc.perform(
+                        MockMvcRequestBuilders.get("/carros/1")
+                ).andExpect(status().isNotFound());
     }
 }
