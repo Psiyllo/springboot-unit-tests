@@ -104,4 +104,44 @@ class CarroControllerTest {
                 .andExpect(jsonPath("$[1].modelo").value("Honda Fit"))
                 .andExpect(jsonPath("$[2].modelo").value("Byd Dolphin Gs"));
     }
+
+    @Test
+    void deveAtualizarCarro() throws Exception{
+        Mockito.when(service.atualizar(Mockito.any(), Mockito.any())).thenReturn(new CarroEntity(
+                1L, "Fiat Palio", 10, 2013
+        ));
+
+        String json = """
+                {
+                    "modelo": "Honda Fit",
+                    "valorDiaria": 15,
+                    "ano": 2015
+                }
+                """;
+
+        mvc.perform(
+                MockMvcRequestBuilders.put("/carros/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+        ).andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deveRetornarNotFoundAoAtualizarCarroInexistente() throws Exception{
+        Mockito.when(service.atualizar(Mockito.any(), Mockito.any())).thenThrow(EntityNotFoundException.class);
+
+        String json = """
+                {
+                    "modelo": "Honda Fit",
+                    "valorDiaria": 15,
+                    "ano": 2015
+                }
+                """;
+
+        mvc.perform(
+                MockMvcRequestBuilders.put("/carros/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+        ).andExpect(status().isNotFound());
+    }
 }

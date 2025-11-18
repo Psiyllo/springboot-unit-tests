@@ -52,7 +52,7 @@ public class CarroController {
             service.atualizar(id, carro);
             return ResponseEntity.noContent().build();
         } catch (EntityNotFoundException e){
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.notFound().build();
         }
     }
 }
