@@ -38,4 +38,20 @@ public class CarroController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Object> atualizarCarro(@PathVariable Long id, @RequestBody CarroEntity carro){
+        try {
+            var carroEncontrado = service.buscarPorId(id);
+            carroEncontrado.setModelo(carro.getModelo());
+            carroEncontrado.setValorDiaria(carro.getValorDiaria());
+            carroEncontrado.setAno(carro.getAno());
+            var carroAtualizado = service.atualizar(id, carroEncontrado);
+            return ResponseEntity.status(HttpStatus.OK).body(carroAtualizado);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity
+                    .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(e.getMessage());
+        }
+    }
 }
