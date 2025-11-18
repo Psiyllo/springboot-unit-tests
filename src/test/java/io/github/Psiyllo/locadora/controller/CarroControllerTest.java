@@ -144,4 +144,20 @@ class CarroControllerTest {
                         .content(json)
         ).andExpect(status().isNotFound());
     }
+    @Test
+    void deveDeletarCarro() throws Exception{
+        Mockito.doNothing().when(service).deletar(Mockito.any());
+
+        mvc.perform(
+                        MockMvcRequestBuilders.delete("/carros/1"))
+                .andExpect(status().isNoContent());
+    }
+    @Test
+    void deveRetornarNotFoundAoDeletarCarroInexistente() throws Exception{
+        Mockito.doThrow(EntityNotFoundException.class).when(service).deletar(Mockito.any());
+
+        mvc.perform(
+                        MockMvcRequestBuilders.delete("/carros/1"))
+                .andExpect(status().isNotFound());
+    }
 }
