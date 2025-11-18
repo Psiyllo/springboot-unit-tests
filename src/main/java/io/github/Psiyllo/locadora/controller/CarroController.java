@@ -1,14 +1,12 @@
 package io.github.Psiyllo.locadora.controller;
 
 import io.github.Psiyllo.locadora.entity.CarroEntity;
+import io.github.Psiyllo.locadora.model.Exceptions.EntityNotFoundException;
 import io.github.Psiyllo.locadora.service.CarroService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("carros")
@@ -28,6 +26,16 @@ public class CarroController {
             return ResponseEntity
                     .status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body(e.getMessage());
+        }
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<CarroEntity> detalhesCarro(@PathVariable Long id){
+        try {
+            var carroEncontrado = service.buscarPorId(id);
+            return ResponseEntity.ok(carroEncontrado);
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
         }
     }
 }
