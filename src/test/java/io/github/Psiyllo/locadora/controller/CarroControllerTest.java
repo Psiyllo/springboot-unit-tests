@@ -1,5 +1,6 @@
 package io.github.Psiyllo.locadora.controller;
 
+import com.jayway.jsonpath.JsonPath;
 import io.github.Psiyllo.locadora.entity.CarroEntity;
 import io.github.Psiyllo.locadora.model.Exceptions.EntityNotFoundException;
 import io.github.Psiyllo.locadora.service.CarroService;
@@ -13,6 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -82,5 +85,23 @@ class CarroControllerTest {
         mvc.perform(
                         MockMvcRequestBuilders.get("/carros/1")
                 ).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deveListarCarros() throws Exception{
+        var listagem = List.of(
+                new CarroEntity(1L, "Fiat Palio", 10, 2013),
+                new CarroEntity(2L, "Honda Fit", 15, 2015),
+                new CarroEntity(3L, "Byd Dolphin Gs", 35, 2026)
+        );
+
+        Mockito.when(service.listarTodos()).thenReturn(listagem);
+
+        mvc.perform(
+                MockMvcRequestBuilders.get("/carros")
+        ).andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].modelo").value("Fiat Palio"))
+                .andExpect(jsonPath("$[1].modelo").value("Honda Fit"))
+                .andExpect(jsonPath("$[2].modelo").value("Byd Dolphin Gs"));
     }
 }
