@@ -52,7 +52,7 @@ class CarroControllerTest {
                 post("/carros")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-        );
+        ).andExpect(status().isCreated());
 
         //verificação
         result
@@ -61,6 +61,26 @@ class CarroControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.modelo").value("Palio"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.valorDiaria").value(10))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.ano").value(2013));
+    }
+
+    @Test
+    void deveRetornarArgumentExceptionAoSalvarCarroComDiariaNegativa() throws Exception{
+        Mockito.when(service.salvar(Mockito.any()))
+                .thenThrow(new IllegalArgumentException("Valor da diária inválido"));
+
+        String json = """
+                {
+                    "modelo": "Palio",
+                    "valorDiaria": 0,
+                    "ano": 2013
+                }
+                """;
+
+        mvc.perform(
+                        MockMvcRequestBuilders.post("/carros")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json)
+                ).andExpect(status().isUnprocessableEntity());
     }
 
     @Test
